@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Choferes - Tienda Parking</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a th:href="@{/}" class="navbar-brand">
+            🚗 Tienda Parking
+        </a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Dashboard</a></li>
+            <li><a th:href="@{/usuarios}">Usuarios</a></li>
+            <li><a th:href="@{/choferes}" class="active">Choferes</a></li>
+            <li><a th:href="@{/carros}">Carros</a></li>
+            <li><a th:href="@{/motores}">Motores</a></li>
+            <li><a th:href="@{/pasajeros}">Pasajeros</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <header class="page-header">
+            <h1>Gestión de Choferes</h1>
+            <p>Lista y registro con almacenamiento DAO / SQL</p>
+        </header>
+
+        <section class="content-grid">
+            <article class="card">
+                <h2 class="card-title">Choferes Registrados</h2>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Cédula</th>
+                            <th>Acciones (Ruta Dinámica)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="chofer : ${choferes}">
+                            <td th:text="${chofer.nombre}">Nombre</td>
+                            <td th:text="${chofer.apellido}">Apellido</td>
+                            <td th:text="${chofer.cedula}">123456789</td>
+                            <td>
+                                <!-- Ruta Dinámica: /choferes/{cedula} -->
+                                <a th:href="@{/choferes/{cedula}(cedula=${chofer.cedula})}" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Ver Detalle</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+
+            <article class="card">
+                <h2 class="card-title">Registrar Nuevo Chofer</h2>
+                <form th:action="@{/choferes}" th:object="${nuevoChofer}" method="post">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required placeholder="Ej: Carlos">
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" id="apellido" th:field="*{apellido}" class="form-control" required placeholder="Ej: Perez">
+                    </div>
+                    <div class="form-group">
+                        <label for="cedula">Cédula</label>
+                        <input type="text" id="cedula" th:field="*{cedula}" class="form-control" required placeholder="Ej: 123456789">
+                    </div>
+                    <button type="submit" class="btn">Guardar Chofer en SQL</button>
+                </form>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Sistema Tienda Parking - Spring Boot MVC + DAO + SQL</p>
+    </footer>
+
+</body>
+</html>

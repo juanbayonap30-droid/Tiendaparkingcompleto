@@ -14,3 +14,10 @@
 .project
 .classpath
 .settings/
+
+# Maven build output
+target/
+
+# NetBeans
+bin/
+nbproject/private/

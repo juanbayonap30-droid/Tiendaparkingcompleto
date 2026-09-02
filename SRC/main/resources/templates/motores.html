@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Motores - Tienda Parking</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a th:href="@{/}" class="navbar-brand">
+            🚗 Tienda Parking
+        </a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Dashboard</a></li>
+            <li><a th:href="@{/choferes}">Choferes</a></li>
+            <li><a th:href="@{/carros}">Carros</a></li>
+            <li><a th:href="@{/motores}" class="active">Motores</a></li>
+            <li><a th:href="@{/pasajeros}">Pasajeros</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <header class="page-header">
+            <h1>Gestión de Motores</h1>
+            <p>Lista y especificaciones técnicas de motores</p>
+        </header>
+
+        <section class="content-grid">
+            <article class="card">
+                <h2 class="card-title">Motores Registrados</h2>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Combustible</th>
+                            <th>Potencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="motor : ${motores}">
+                            <td th:text="${motor.tipo}">V6</td>
+                            <td th:text="${motor.combustible}">Gasolina</td>
+                            <td th:text="${motor.potencia}">450 HP</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+
+            <article class="card">
+                <h2 class="card-title">Registrar Nuevo Motor</h2>
+                <form th:action="@{/motores}" th:object="${nuevoMotor}" method="post">
+                    <div class="form-group">
+                        <label for="tipo">Tipo de Motor</label>
+                        <input type="text" id="tipo" th:field="*{tipo}" class="form-control" required placeholder="Ej: V6">
+                    </div>
+                    <div class="form-group">
+                        <label for="combustible">Combustible</label>
+                        <input type="text" id="combustible" th:field="*{combustible}" class="form-control" required placeholder="Ej: Gasolina">
+                    </div>
+                    <div class="form-group">
+                        <label for="potencia">Potencia</label>
+                        <input type="text" id="potencia" th:field="*{potencia}" class="form-control" required placeholder="Ej: 450 HP">
+                    </div>
+                    <button type="submit" class="btn">Guardar Motor</button>
+                </form>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Sistema Tienda Parking - Spring Boot MVC en XAMPP</p>
+    </footer>
+
+</body>
+</html>

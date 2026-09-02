@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Usuario - Tienda Parking</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a th:href="@{/}" class="navbar-brand">
+            🚗 Tienda Parking
+        </a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Dashboard</a></li>
+            <li><a th:href="@{/usuarios}">Usuarios</a></li>
+            <li><a th:href="@{/choferes}">Choferes</a></li>
+            <li><a th:href="@{/carros}">Carros</a></li>
+            <li><a th:href="@{/motores}">Motores</a></li>
+            <li><a th:href="@{/pasajeros}">Pasajeros</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <header class="page-header">
+            <h1>Detalle de Usuario (Ruta Dinámica)</h1>
+            <p>Información consultada mediante <code>@PathVariable("id")</code></p>
+        </header>
+
+        <section class="card" style="max-width: 600px; margin: 0 auto;">
+            <div th:if="${usuario != null}">
+                <h2 class="card-title" th:text="${usuario.nombre}">Nombre de Usuario</h2>
+                <div style="line-height: 2; margin: 1rem 0;">
+                    <p><strong>ID:</strong> <span th:text="${usuario.id}">1</span></p>
+                    <p><strong>Email:</strong> <span th:text="${usuario.email}">user@ejemplo.com</span></p>
+                    <p><strong>Rol:</strong> <span class="badge badge-success" th:text="${usuario.rol}">Rol</span></p>
+                </div>
+            </div>
+
+            <div th:if="${usuario == null}">
+                <h2 class="card-title" style="color: #ef4444;">Usuario No Encontrado</h2>
+                <p>No se encontró ningún usuario con el ID: <strong th:text="${idBuscado}">0</strong></p>
+            </div>
+
+            <br>
+            <a th:href="@{/usuarios}" class="btn" style="text-decoration: none; text-align: center;">Volver a Usuarios</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Sistema Tienda Parking - Spring Boot MVC + DAO + SQL</p>
+    </footer>
+
+</body>
+</html>

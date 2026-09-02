@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Carros - Tienda Parking</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a th:href="@{/}" class="navbar-brand">
+            🚗 Tienda Parking
+        </a>
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Dashboard</a></li>
+            <li><a th:href="@{/usuarios}">Usuarios</a></li>
+            <li><a th:href="@{/choferes}">Choferes</a></li>
+            <li><a th:href="@{/carros}" class="active">Carros</a></li>
+            <li><a th:href="@{/motores}">Motores</a></li>
+            <li><a th:href="@{/pasajeros}">Pasajeros</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <header class="page-header">
+            <h1>Gestión de Carros</h1>
+            <p>Lista y registro con almacenamiento DAO / SQL</p>
+        </header>
+
+        <section class="content-grid">
+            <article class="card">
+                <h2 class="card-title">Carros Registrados</h2>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Placa</th>
+                            <th>Acciones (Ruta Dinámica)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="carro : ${carros}">
+                            <td th:text="${carro.marca}">Marca</td>
+                            <td th:text="${carro.modelo}">Modelo</td>
+                            <td th:text="${carro.placa}">ABC123</td>
+                            <td>
+                                <!-- Ruta Dinámica: /carros/{placa} -->
+                                <a th:href="@{/carros/{placa}(placa=${carro.placa})}" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Ver Detalle</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+
+            <article class="card">
+                <h2 class="card-title">Registrar Nuevo Carro</h2>
+                <form th:action="@{/carros}" th:object="${nuevoCarro}" method="post">
+                    <div class="form-group">
+                        <label for="marca">Marca</label>
+                        <input type="text" id="marca" th:field="*{marca}" class="form-control" required placeholder="Ej: Mazda">
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo">Modelo</label>
+                        <input type="text" id="modelo" th:field="*{modelo}" class="form-control" required placeholder="Ej: Corolla">
+                    </div>
+                    <div class="form-group">
+                        <label for="placa">Placa</label>
+                        <input type="text" id="placa" th:field="*{placa}" class="form-control" required placeholder="Ej: ABC123">
+                    </div>
+                    <button type="submit" class="btn">Guardar Carro en SQL</button>
+                </form>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Sistema Tienda Parking - Spring Boot MVC + DAO + SQL</p>
+    </footer>
+
+</body>
+</html>
