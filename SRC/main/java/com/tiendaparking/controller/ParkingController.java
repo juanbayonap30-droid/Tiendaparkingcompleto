@@ -1,10 +1,18 @@
 package com.tiendaparking.controller;
 
-import com.tiendaparking.model.*;
-import com.tiendaparking.service.ParkingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.tiendaparking.model.Carro;
+import com.tiendaparking.model.Chofer;
+import com.tiendaparking.model.Motor;
+import com.tiendaparking.model.Pasajero;
+import com.tiendaparking.model.Usuario;
+import com.tiendaparking.service.ParkingService;
 
 @Controller
 public class ParkingController {
@@ -55,6 +63,7 @@ public class ParkingController {
     public String carros(Model model) {
         model.addAttribute("carros", parkingService.getCarros());
         model.addAttribute("nuevoCarro", new Carro());
+        model.addAttribute("motores", parkingService.getMotores());
         return "carros";
     }
 

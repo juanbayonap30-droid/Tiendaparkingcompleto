@@ -4,6 +4,7 @@ public class Carro {
     private String marca;
     private String modelo;
     private String placa;
+    private Long motorId;
 
     public Carro() {
     }
@@ -38,8 +39,16 @@ public class Carro {
         this.placa = placa;
     }
 
+    public Long getMotorId() {
+        return motorId;
+    }
+
+    public void setMotorId(Long motorId) {
+        this.motorId = motorId;
+    }
+
     @Override
     public String toString() {
-        return "Carro [Marca: " + marca + ", Modelo: " + modelo + ", Placa: " + placa + "]";
+        return "Carro [Marca: " + marca + ", Modelo: " + modelo + ", Placa: " + placa + ", MotorId: " + motorId + "]";
     }
 }

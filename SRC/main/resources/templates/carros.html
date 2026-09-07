@@ -10,7 +10,7 @@
 
     <nav class="navbar">
         <a th:href="@{/}" class="navbar-brand">
-            🚗 Tienda Parking
+            Tienda Parking
         </a>
         <ul class="nav-links">
             <li><a th:href="@{/}">Dashboard</a></li>
@@ -37,6 +37,7 @@
                             <th>Marca</th>
                             <th>Modelo</th>
                             <th>Placa</th>
+                            <th>Motor</th>
                             <th>Acciones (Ruta Dinámica)</th>
                         </tr>
                     </thead>
@@ -45,6 +46,7 @@
                             <td th:text="${carro.marca}">Marca</td>
                             <td th:text="${carro.modelo}">Modelo</td>
                             <td th:text="${carro.placa}">ABC123</td>
+                            <td th:text="${carro.motorId != null ? carro.motorId : 'Sin motor'}">-</td>
                             <td>
                                 <!-- Ruta Dinámica: /carros/{placa} -->
                                 <a th:href="@{/carros/{placa}(placa=${carro.placa})}" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Ver Detalle</a>
@@ -72,6 +74,16 @@
                         <label for="placa">Placa</label>
                         <input type="text" id="placa" th:field="*{placa}" class="form-control" required placeholder="Ej: ABC123"
                                pattern="[A-Za-z0-9]+" title="Solo letras y números (alfanumérico)">
+                    </div>
+                    <div class="form-group">
+                        <label for="motorId">Motor</label>
+                        <select id="motorId" th:field="*{motorId}" class="form-control" required>
+                            <option value="">-- Selecciona un motor --</option>
+                            <option th:each="motor : ${motores}"
+                                    th:value="${motor.id}"
+                                    th:text="${motor.tipo + ' - ' + motor.combustible + ' (' + motor.potencia + ')'}">
+                            </option>
+                        </select>
                     </div>
                     <button type="submit" class="btn">Guardar Carro en SQL</button>
                 </form>

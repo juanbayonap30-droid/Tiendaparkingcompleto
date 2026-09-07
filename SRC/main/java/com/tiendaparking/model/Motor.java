@@ -1,6 +1,7 @@
 package com.tiendaparking.model;
 
 public class Motor {
+    private Long id;
     private String tipo;
     private String combustible;
     private String potencia;
@@ -8,10 +9,19 @@ public class Motor {
     public Motor() {
     }
 
-    public Motor(String tipo, String combustible, String potencia) {
+    public Motor(Long id, String tipo, String combustible, String potencia) {
+        this.id = id;
         this.tipo = tipo;
         this.combustible = combustible;
         this.potencia = potencia;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTipo() {

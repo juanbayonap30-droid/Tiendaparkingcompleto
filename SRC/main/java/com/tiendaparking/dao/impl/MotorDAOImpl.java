@@ -1,13 +1,14 @@
 package com.tiendaparking.dao.impl;
 
-import com.tiendaparking.dao.MotorDAO;
-import com.tiendaparking.model.Motor;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
-import java.util.List;
+import com.tiendaparking.dao.MotorDAO;
+import com.tiendaparking.model.Motor;
 
 @Repository
 public class MotorDAOImpl implements MotorDAO {
@@ -18,16 +19,20 @@ public class MotorDAOImpl implements MotorDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<Motor> rowMapper = (rs, rowNum) -> new Motor(
+    private final RowMapper<Motor> rowMapper = (rs, rowNum) -> {
+        Motor m = new Motor(
+            rs.getLong("id"),
             rs.getString("tipo"),
             rs.getString("combustible"),
             rs.getString("potencia")
-    );
+        );
+        return m;
+    };
 
     @Override
     public List<Motor> obtenerTodos() {
         try {
-            String sql = "SELECT tipo, combustible, potencia FROM motores";
+            String sql = "SELECT id, tipo, combustible, potencia FROM motores";
             return jdbcTemplate.query(sql, rowMapper);
         } catch (Exception e) {
             System.err.println("Error al obtener motores: " + e.getMessage());
