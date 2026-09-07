@@ -35,6 +35,9 @@ public class CarroDAOImpl implements CarroDAO {
     @Override
     public List<Carro> obtenerTodos() {
         try {
+            jdbcTemplate.execute(
+                "ALTER TABLE carros ADD COLUMN IF NOT EXISTS motor_id BIGINT NULL"
+            );
             String sql = "SELECT marca, modelo, placa, motor_id FROM carros";
             return jdbcTemplate.query(sql, rowMapper);
         } catch (Exception e) {
