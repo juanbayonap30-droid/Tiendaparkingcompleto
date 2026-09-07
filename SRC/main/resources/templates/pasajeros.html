@@ -53,15 +53,21 @@
                 <form th:action="@{/pasajeros}" th:object="${nuevoPasajero}" method="post">
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required placeholder="Ej: Ana">
+                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required placeholder="Ej: Ana"
+                               pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo se permiten letras"
+                               oninput="this.value = this.value.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '')">
                     </div>
                     <div class="form-group">
                         <label for="apellido">Apellido</label>
-                        <input type="text" id="apellido" th:field="*{apellido}" class="form-control" required placeholder="Ej: Gomez">
+                        <input type="text" id="apellido" th:field="*{apellido}" class="form-control" required placeholder="Ej: Gomez"
+                               pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo se permiten letras"
+                               oninput="this.value = this.value.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '')">
                     </div>
                     <div class="form-group">
                         <label for="cedula">Cédula</label>
-                        <input type="text" id="cedula" th:field="*{cedula}" class="form-control" required placeholder="Ej: 456789012">
+                        <input type="text" id="cedula" th:field="*{cedula}" class="form-control" required placeholder="Ej: 456789012"
+                               pattern="[0-9]+" title="Solo se permiten números"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     </div>
                     <button type="submit" class="btn">Guardar Pasajero</button>
                 </form>

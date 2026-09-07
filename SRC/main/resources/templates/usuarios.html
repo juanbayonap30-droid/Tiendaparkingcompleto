@@ -61,7 +61,9 @@
                 <form th:action="@{/usuarios}" th:object="${nuevoUsuario}" method="post">
                     <div class="form-group">
                         <label for="nombre">Nombre Completo</label>
-                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required placeholder="Ej: Juan Bayona">
+                        <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required placeholder="Ej: Juan Bayona"
+                               pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo se permiten letras"
+                               oninput="this.value = this.value.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '')">
                     </div>
                     <div class="form-group">
                         <label for="email">Correo Electrónico</label>

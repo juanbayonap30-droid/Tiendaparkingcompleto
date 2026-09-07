@@ -59,15 +59,19 @@
                 <form th:action="@{/carros}" th:object="${nuevoCarro}" method="post">
                     <div class="form-group">
                         <label for="marca">Marca</label>
-                        <input type="text" id="marca" th:field="*{marca}" class="form-control" required placeholder="Ej: Mazda">
+                        <input type="text" id="marca" th:field="*{marca}" class="form-control" required placeholder="Ej: Mazda"
+                               pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo se permiten letras"
+                               oninput="this.value = this.value.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '')">
                     </div>
                     <div class="form-group">
                         <label for="modelo">Modelo</label>
-                        <input type="text" id="modelo" th:field="*{modelo}" class="form-control" required placeholder="Ej: Corolla">
+                        <input type="text" id="modelo" th:field="*{modelo}" class="form-control" required placeholder="Ej: Corolla"
+                               pattern="[A-Za-z0-9áéíóúÁÉÍÓÚñÑ\s]+" title="Letras y números permitidos">
                     </div>
                     <div class="form-group">
                         <label for="placa">Placa</label>
-                        <input type="text" id="placa" th:field="*{placa}" class="form-control" required placeholder="Ej: ABC123">
+                        <input type="text" id="placa" th:field="*{placa}" class="form-control" required placeholder="Ej: ABC123"
+                               pattern="[A-Za-z0-9]+" title="Solo letras y números (alfanumérico)">
                     </div>
                     <button type="submit" class="btn">Guardar Carro en SQL</button>
                 </form>
