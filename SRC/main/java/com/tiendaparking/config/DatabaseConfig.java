@@ -1,48 +1,33 @@
 package com.tiendaparking.config;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class DatabaseConfig {
 
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/tienda_parking?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true");
-        dataSource.setUsername("root");
-        dataSource.setPassword("");
-        return dataSource;
-    }
+    private final JdbcTemplate jdbc;
 
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+    public DatabaseConfig(JdbcTemplate jdbc) {
+        this.jdbc = jdbc;
     }
 
     @PostConstruct
     public void inicializarTablasMySQL() {
-        JdbcTemplate jdbc = new JdbcTemplate(dataSource());
         try {
             jdbc.execute("CREATE TABLE IF NOT EXISTS choferes (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nombre VARCHAR(100) NOT NULL, " +
                     "apellido VARCHAR(100) NOT NULL, " +
                     "cedula VARCHAR(20) NOT NULL)");
-            System.out.println("[DB] Tabla choferes OK");
 
             jdbc.execute("CREATE TABLE IF NOT EXISTS motores (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "tipo VARCHAR(50) NOT NULL, " +
                     "combustible VARCHAR(50) NOT NULL, " +
                     "potencia VARCHAR(50) NOT NULL)");
-            System.out.println("[DB] Tabla motores OK");
 
             jdbc.execute("CREATE TABLE IF NOT EXISTS carros (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
@@ -50,29 +35,22 @@ public class DatabaseConfig {
                     "modelo VARCHAR(100) NOT NULL, " +
                     "placa VARCHAR(20) NOT NULL, " +
                     "motor_id INT NULL)");
-            System.out.println("[DB] Tabla carros OK");
 
-            // Agregar motor_id si la tabla ya existía sin esa columna
             try {
                 jdbc.execute("ALTER TABLE carros ADD COLUMN motor_id INT NULL");
-                System.out.println("[DB] Columna motor_id agregada a carros");
-            } catch (Exception ignored) {
-                System.out.println("[DB] Columna motor_id ya existe en carros");
-            }
+            } catch (Exception ignored) {}
 
             jdbc.execute("CREATE TABLE IF NOT EXISTS usuarios (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nombre VARCHAR(100) NOT NULL, " +
                     "email VARCHAR(100) NOT NULL, " +
                     "rol VARCHAR(50) NOT NULL)");
-            System.out.println("[DB] Tabla usuarios OK");
 
             jdbc.execute("CREATE TABLE IF NOT EXISTS pasajeros (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nombre VARCHAR(100) NOT NULL, " +
                     "apellido VARCHAR(100) NOT NULL, " +
                     "cedula VARCHAR(20) NOT NULL)");
-            System.out.println("[DB] Tabla pasajeros OK");
 
             System.out.println("[DB] Todas las tablas verificadas/creadas exitosamente.");
         } catch (Exception e) {
