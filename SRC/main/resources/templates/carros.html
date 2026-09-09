@@ -9,9 +9,7 @@
 <body>
 
     <nav class="navbar">
-        <a th:href="@{/}" class="navbar-brand">
-            Tienda Parking
-        </a>
+        <a th:href="@{/}" class="navbar-brand">🚗 Tienda Parking</a>
         <ul class="nav-links">
             <li><a th:href="@{/}">Dashboard</a></li>
             <li><a th:href="@{/usuarios}">Usuarios</a></li>
@@ -38,7 +36,7 @@
                             <th>Modelo</th>
                             <th>Placa</th>
                             <th>Motor</th>
-                            <th>Acciones (Ruta Dinámica)</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,9 +45,16 @@
                             <td th:text="${carro.modelo}">Modelo</td>
                             <td th:text="${carro.placa}">ABC123</td>
                             <td th:text="${carro.motorId != null ? carro.motorId : 'Sin motor'}">-</td>
-                            <td>
-                                <!-- Ruta Dinámica: /carros/{placa} -->
-                                <a th:href="@{/carros/{placa}(placa=${carro.placa})}" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Ver Detalle</a>
+                            <td style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <a th:href="@{/carros/{placa}(placa=${carro.placa})}" style="color:#38bdf8;text-decoration:none;font-weight:600;">Ver</a>
+                                <button class="btn btn-sm btn-edit"
+                                        th:onclick="'abrirEditarCarro(\'' + ${carro.placa} + '\',\'' + ${carro.marca} + '\',\'' + ${carro.modelo} + '\',' + (${carro.motorId} != null ? ${carro.motorId} : 'null') + ')'">
+                                    Editar
+                                </button>
+                                <form th:action="@{/carros/{placa}/eliminar(placa=${carro.placa})}" method="post"
+                                      onsubmit="return confirm('¿Eliminar este carro?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>
@@ -91,9 +96,56 @@
         </section>
     </main>
 
+    <!-- Modal Editar Carro -->
+    <div id="modalEditarCarro" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
+        <div class="card" style="width:400px;max-width:90%;position:relative;">
+            <h2 class="card-title">Editar Carro</h2>
+            <form id="formEditarCarro" method="post">
+                <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" id="edit-marca" name="marca" class="form-control" required
+                           pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras"
+                           oninput="this.value = this.value.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label>Modelo</label>
+                    <input type="text" id="edit-modelo" name="modelo" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Motor</label>
+                    <select id="edit-motorId" name="motorId" class="form-control">
+                        <option value="">-- Sin motor --</option>
+                        <option th:each="motor : ${motores}"
+                                th:value="${motor.id}"
+                                th:text="${motor.tipo + ' - ' + motor.combustible + ' (' + motor.potencia + ')'}">
+                        </option>
+                    </select>
+                </div>
+                <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+                    <button type="submit" class="btn">Guardar</button>
+                    <button type="button" class="btn btn-danger" onclick="cerrarModalCarro()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2026 Sistema Tienda Parking - Spring Boot MVC + DAO + SQL</p>
     </footer>
 
+    <script>
+        function abrirEditarCarro(placa, marca, modelo, motorId) {
+            document.getElementById('edit-marca').value = marca;
+            document.getElementById('edit-modelo').value = modelo;
+            var sel = document.getElementById('edit-motorId');
+            sel.value = (motorId && motorId !== 'null') ? motorId : '';
+            document.getElementById('formEditarCarro').action = '/carros/' + placa + '/editar';
+            var modal = document.getElementById('modalEditarCarro');
+            modal.style.display = 'flex';
+        }
+        function cerrarModalCarro() {
+            document.getElementById('modalEditarCarro').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

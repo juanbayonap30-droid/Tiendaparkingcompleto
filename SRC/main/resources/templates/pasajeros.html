@@ -9,9 +9,7 @@
 <body>
 
     <nav class="navbar">
-        <a th:href="@{/}" class="navbar-brand">
-            🚗 Tienda Parking
-        </a>
+        <a th:href="@{/}" class="navbar-brand">🚗 Tienda Parking</a>
         <ul class="nav-links">
             <li><a th:href="@{/}">Dashboard</a></li>
             <li><a th:href="@{/choferes}">Choferes</a></li>
@@ -36,6 +34,7 @@
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Cédula</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,6 +42,16 @@
                             <td th:text="${pasajero.nombre}">Nombre</td>
                             <td th:text="${pasajero.apellido}">Apellido</td>
                             <td th:text="${pasajero.cedula}">123456789</td>
+                            <td style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                                <button class="btn btn-sm btn-edit"
+                                        th:onclick="'abrirEditarPasajero(\'' + ${pasajero.cedula} + '\',\'' + ${pasajero.nombre} + '\',\'' + ${pasajero.apellido} + '\')'">
+                                    Editar
+                                </button>
+                                <form th:action="@{/pasajeros/{cedula}/eliminar(cedula=${pasajero.cedula})}" method="post"
+                                      onsubmit="return confirm('¿Eliminar este pasajero?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -75,9 +84,45 @@
         </section>
     </main>
 
+    <!-- Modal Editar Pasajero -->
+    <div id="modalEditarPasajero" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
+        <div class="card" style="width:400px;max-width:90%;position:relative;">
+            <h2 class="card-title">Editar Pasajero</h2>
+            <form id="formEditarPasajero" method="post">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="edit-nombre" name="nombre" class="form-control" required
+                           pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras"
+                           oninput="this.value = this.value.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label>Apellido</label>
+                    <input type="text" id="edit-apellido" name="apellido" class="form-control" required
+                           pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras"
+                           oninput="this.value = this.value.replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ\s]/g, '')">
+                </div>
+                <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+                    <button type="submit" class="btn">Guardar</button>
+                    <button type="button" class="btn btn-danger" onclick="cerrarModalPasajero()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2026 Sistema Tienda Parking - Spring Boot MVC en XAMPP</p>
     </footer>
 
+    <script>
+        function abrirEditarPasajero(cedula, nombre, apellido) {
+            document.getElementById('edit-nombre').value = nombre;
+            document.getElementById('edit-apellido').value = apellido;
+            document.getElementById('formEditarPasajero').action = '/pasajeros/' + cedula + '/editar';
+            document.getElementById('modalEditarPasajero').style.display = 'flex';
+        }
+        function cerrarModalPasajero() {
+            document.getElementById('modalEditarPasajero').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

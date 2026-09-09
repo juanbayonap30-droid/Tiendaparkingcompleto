@@ -58,6 +58,19 @@ public class ParkingController {
         return "redirect:/choferes";
     }
 
+    @PostMapping("/choferes/{cedula}/editar")
+    public String editarChofer(@PathVariable String cedula, @ModelAttribute Chofer chofer) {
+        chofer.setCedula(cedula);
+        parkingService.actualizarChofer(chofer);
+        return "redirect:/choferes";
+    }
+
+    @PostMapping("/choferes/{cedula}/eliminar")
+    public String eliminarChofer(@PathVariable String cedula) {
+        parkingService.eliminarChofer(cedula);
+        return "redirect:/choferes";
+    }
+
     // Ruta fija: Carros
     @GetMapping("/carros")
     public String carros(Model model) {
@@ -73,12 +86,26 @@ public class ParkingController {
         Carro carro = parkingService.getCarroPorPlaca(placa);
         model.addAttribute("carro", carro);
         model.addAttribute("placaBuscada", placa);
+        model.addAttribute("motores", parkingService.getMotores());
         return "carro-detalle";
     }
 
     @PostMapping("/carros")
     public String guardarCarro(@ModelAttribute Carro carro) {
         parkingService.addCarro(carro);
+        return "redirect:/carros";
+    }
+
+    @PostMapping("/carros/{placa}/editar")
+    public String editarCarro(@PathVariable String placa, @ModelAttribute Carro carro) {
+        carro.setPlaca(placa);
+        parkingService.actualizarCarro(carro);
+        return "redirect:/carros";
+    }
+
+    @PostMapping("/carros/{placa}/eliminar")
+    public String eliminarCarro(@PathVariable String placa) {
+        parkingService.eliminarCarro(placa);
         return "redirect:/carros";
     }
 
@@ -102,6 +129,19 @@ public class ParkingController {
     @PostMapping("/usuarios")
     public String guardarUsuario(@ModelAttribute Usuario usuario) {
         parkingService.addUsuario(usuario);
+        return "redirect:/usuarios";
+    }
+
+    @PostMapping("/usuarios/{id}/editar")
+    public String editarUsuario(@PathVariable Long id, @ModelAttribute Usuario usuario) {
+        usuario.setId(id);
+        parkingService.actualizarUsuario(usuario);
+        return "redirect:/usuarios";
+    }
+
+    @PostMapping("/usuarios/{id}/eliminar")
+    public String eliminarUsuario(@PathVariable Long id) {
+        parkingService.eliminarUsuario(id);
         return "redirect:/usuarios";
     }
 
@@ -130,6 +170,19 @@ public class ParkingController {
     @PostMapping("/pasajeros")
     public String guardarPasajero(@ModelAttribute Pasajero pasajero) {
         parkingService.addPasajero(pasajero);
+        return "redirect:/pasajeros";
+    }
+
+    @PostMapping("/pasajeros/{cedula}/editar")
+    public String editarPasajero(@PathVariable String cedula, @ModelAttribute Pasajero pasajero) {
+        pasajero.setCedula(cedula);
+        parkingService.actualizarPasajero(pasajero);
+        return "redirect:/pasajeros";
+    }
+
+    @PostMapping("/pasajeros/{cedula}/eliminar")
+    public String eliminarPasajero(@PathVariable String cedula) {
+        parkingService.eliminarPasajero(cedula);
         return "redirect:/pasajeros";
     }
 }

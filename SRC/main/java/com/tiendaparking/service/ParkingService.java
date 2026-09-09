@@ -1,10 +1,20 @@
 package com.tiendaparking.service;
 
-import com.tiendaparking.dao.*;
-import com.tiendaparking.model.*;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.tiendaparking.dao.CarroDAO;
+import com.tiendaparking.dao.ChoferDAO;
+import com.tiendaparking.dao.MotorDAO;
+import com.tiendaparking.dao.PasajeroDAO;
+import com.tiendaparking.dao.UsuarioDAO;
+import com.tiendaparking.model.ApiModel;
+import com.tiendaparking.model.Carro;
+import com.tiendaparking.model.Chofer;
+import com.tiendaparking.model.Motor;
+import com.tiendaparking.model.Pasajero;
+import com.tiendaparking.model.Usuario;
 
 @Service
 public class ParkingService {
@@ -42,6 +52,10 @@ public class ParkingService {
         choferDAO.guardar(chofer);
     }
 
+    public void actualizarChofer(Chofer chofer) {
+        choferDAO.actualizar(chofer);
+    }
+
     public void eliminarChofer(String cedula) {
         choferDAO.eliminar(cedula);
     }
@@ -59,6 +73,14 @@ public class ParkingService {
         carroDAO.guardar(carro);
     }
 
+    public void actualizarCarro(Carro carro) {
+        carroDAO.actualizar(carro);
+    }
+
+    public void eliminarCarro(String placa) {
+        carroDAO.eliminar(placa);
+    }
+
     // Usuarios
     public List<Usuario> getUsuarios() {
         return usuarioDAO.obtenerTodos();
@@ -70,6 +92,14 @@ public class ParkingService {
 
     public void addUsuario(Usuario usuario) {
         usuarioDAO.guardar(usuario);
+    }
+
+    public void actualizarUsuario(Usuario usuario) {
+        usuarioDAO.actualizar(usuario);
+    }
+
+    public void eliminarUsuario(Long id) {
+        usuarioDAO.eliminar(id);
     }
 
     // Motores
@@ -86,8 +116,20 @@ public class ParkingService {
         return pasajeroDAO.obtenerTodos();
     }
 
+    public Pasajero getPasajeroPorCedula(String cedula) {
+        return pasajeroDAO.obtenerPorCedula(cedula);
+    }
+
     public void addPasajero(Pasajero pasajero) {
         pasajeroDAO.guardar(pasajero);
+    }
+
+    public void actualizarPasajero(Pasajero pasajero) {
+        pasajeroDAO.actualizar(pasajero);
+    }
+
+    public void eliminarPasajero(String cedula) {
+        pasajeroDAO.eliminar(cedula);
     }
 
     // API Model
