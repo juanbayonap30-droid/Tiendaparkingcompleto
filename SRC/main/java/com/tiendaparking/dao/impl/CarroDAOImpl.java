@@ -25,9 +25,9 @@ public class CarroDAOImpl implements CarroDAO {
             rs.getString("modelo"),
             rs.getString("placa")
         );
-        long motorId = rs.getLong("motor_id");
+        int motorId = rs.getInt("motor_id");
         if (!rs.wasNull()) {
-            c.setMotorId(motorId);
+            c.setMotorId((long) motorId);
         }
         return c;
     };
@@ -35,9 +35,6 @@ public class CarroDAOImpl implements CarroDAO {
     @Override
     public List<Carro> obtenerTodos() {
         try {
-            jdbcTemplate.execute(
-                "ALTER TABLE carros ADD COLUMN IF NOT EXISTS motor_id BIGINT NULL"
-            );
             String sql = "SELECT marca, modelo, placa, motor_id FROM carros";
             return jdbcTemplate.query(sql, rowMapper);
         } catch (Exception e) {

@@ -21,7 +21,7 @@ public class MotorDAOImpl implements MotorDAO {
 
     private final RowMapper<Motor> rowMapper = (rs, rowNum) -> {
         Motor m = new Motor(
-            rs.getLong("id"),
+            (long) rs.getInt("id"),
             rs.getString("tipo"),
             rs.getString("combustible"),
             rs.getString("potencia")
@@ -32,10 +32,6 @@ public class MotorDAOImpl implements MotorDAO {
     @Override
     public List<Motor> obtenerTodos() {
         try {
-            // Asegurar que la columna id existe
-            jdbcTemplate.execute(
-                "ALTER TABLE motores ADD COLUMN IF NOT EXISTS id BIGINT AUTO_INCREMENT PRIMARY KEY FIRST"
-            );
             String sql = "SELECT id, tipo, combustible, potencia FROM motores";
             return jdbcTemplate.query(sql, rowMapper);
         } catch (Exception e) {
