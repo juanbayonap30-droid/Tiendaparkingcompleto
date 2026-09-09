@@ -52,9 +52,11 @@ public class PasajeroDAOImpl implements PasajeroDAO {
     public void guardar(Pasajero pasajero) {
         try {
             String sql = "INSERT INTO pasajeros (nombre, apellido, cedula) VALUES (?, ?, ?)";
-            jdbcTemplate.update(sql, pasajero.getNombre(), pasajero.getApellido(), pasajero.getCedula());
+            int rows = jdbcTemplate.update(sql, pasajero.getNombre(), pasajero.getApellido(), pasajero.getCedula());
+            System.out.println("[PasajeroDAO] Filas insertadas: " + rows + " | " + pasajero);
         } catch (Exception e) {
-            System.err.println("Error al guardar pasajero: " + e.getMessage());
+            System.err.println("[PasajeroDAO] ERROR al guardar: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
