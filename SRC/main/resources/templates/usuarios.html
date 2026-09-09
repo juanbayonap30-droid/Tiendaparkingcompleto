@@ -47,8 +47,11 @@
                             <td><span class="badge badge-success" th:text="${usuario.rol}">Rol</span></td>
                             <td style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                                 <a th:href="@{/usuarios/{id}(id=${usuario.id})}" style="color:#38bdf8;text-decoration:none;font-weight:600;">Ver</a>
-                                <button class="btn btn-sm btn-edit"
-                                        th:onclick="'abrirEditarUsuario(' + ${usuario.id} + ',\'' + ${usuario.nombre} + '\',\'' + ${usuario.email} + '\',\'' + ${usuario.rol} + '\')'">
+                                <button class="btn btn-sm btn-edit btn-abrir-editar-usuario"
+                                        th:data-id="${usuario.id}"
+                                        th:data-nombre="${usuario.nombre}"
+                                        th:data-email="${usuario.email}"
+                                        th:data-rol="${usuario.rol}">
                                     Editar
                                 </button>
                                 <form th:action="@{/usuarios/{id}/eliminar(id=${usuario.id})}" method="post"
@@ -91,7 +94,7 @@
 
     <!-- Modal Editar Usuario -->
     <div id="modalEditarUsuario" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
-        <div class="card" style="width:400px;max-width:90%;position:relative;">
+        <div class="card" style="width:400px;max-width:90%;">
             <h2 class="card-title">Editar Usuario</h2>
             <form id="formEditarUsuario" method="post">
                 <div class="form-group">
@@ -115,7 +118,7 @@
                 </div>
                 <div style="display:flex;gap:0.5rem;margin-top:1rem;">
                     <button type="submit" class="btn">Guardar</button>
-                    <button type="button" class="btn btn-danger" onclick="cerrarModalUsuario()">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="document.getElementById('modalEditarUsuario').style.display='none'">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -126,16 +129,19 @@
     </footer>
 
     <script>
-        function abrirEditarUsuario(id, nombre, email, rol) {
-            document.getElementById('edit-nombre').value = nombre;
-            document.getElementById('edit-email').value = email;
-            document.getElementById('edit-rol').value = rol;
-            document.getElementById('formEditarUsuario').action = '/usuarios/' + id + '/editar';
-            document.getElementById('modalEditarUsuario').style.display = 'flex';
-        }
-        function cerrarModalUsuario() {
-            document.getElementById('modalEditarUsuario').style.display = 'none';
-        }
+        document.querySelectorAll('.btn-abrir-editar-usuario').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
+                var nombre = this.getAttribute('data-nombre');
+                var email = this.getAttribute('data-email');
+                var rol = this.getAttribute('data-rol');
+                document.getElementById('edit-nombre').value = nombre;
+                document.getElementById('edit-email').value = email;
+                document.getElementById('edit-rol').value = rol;
+                document.getElementById('formEditarUsuario').action = '/usuarios/' + id + '/editar';
+                document.getElementById('modalEditarUsuario').style.display = 'flex';
+            });
+        });
     </script>
 </body>
 </html>

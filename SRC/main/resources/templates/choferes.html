@@ -45,8 +45,10 @@
                             <td th:text="${chofer.cedula}">123456789</td>
                             <td style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                                 <a th:href="@{/choferes/{cedula}(cedula=${chofer.cedula})}" style="color:#38bdf8;text-decoration:none;font-weight:600;">Ver</a>
-                                <button class="btn btn-sm btn-edit"
-                                        th:onclick="'abrirEditarChofer(\'' + ${chofer.cedula} + '\',\'' + ${chofer.nombre} + '\',\'' + ${chofer.apellido} + '\')'">
+                                <button class="btn btn-sm btn-edit btn-abrir-editar"
+                                        th:data-cedula="${chofer.cedula}"
+                                        th:data-nombre="${chofer.nombre}"
+                                        th:data-apellido="${chofer.apellido}">
                                     Editar
                                 </button>
                                 <form th:action="@{/choferes/{cedula}/eliminar(cedula=${chofer.cedula})}" method="post"
@@ -88,7 +90,7 @@
 
     <!-- Modal Editar Chofer -->
     <div id="modalEditarChofer" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
-        <div class="card" style="width:400px;max-width:90%;position:relative;">
+        <div class="card" style="width:400px;max-width:90%;">
             <h2 class="card-title">Editar Chofer</h2>
             <form id="formEditarChofer" method="post">
                 <div class="form-group">
@@ -105,7 +107,7 @@
                 </div>
                 <div style="display:flex;gap:0.5rem;margin-top:1rem;">
                     <button type="submit" class="btn">Guardar</button>
-                    <button type="button" class="btn btn-danger" onclick="cerrarModalChofer()">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="document.getElementById('modalEditarChofer').style.display='none'">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -116,15 +118,17 @@
     </footer>
 
     <script>
-        function abrirEditarChofer(cedula, nombre, apellido) {
-            document.getElementById('edit-nombre').value = nombre;
-            document.getElementById('edit-apellido').value = apellido;
-            document.getElementById('formEditarChofer').action = '/choferes/' + cedula + '/editar';
-            document.getElementById('modalEditarChofer').style.display = 'flex';
-        }
-        function cerrarModalChofer() {
-            document.getElementById('modalEditarChofer').style.display = 'none';
-        }
+        document.querySelectorAll('.btn-abrir-editar').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var cedula = this.getAttribute('data-cedula');
+                var nombre = this.getAttribute('data-nombre');
+                var apellido = this.getAttribute('data-apellido');
+                document.getElementById('edit-nombre').value = nombre;
+                document.getElementById('edit-apellido').value = apellido;
+                document.getElementById('formEditarChofer').action = '/choferes/' + cedula + '/editar';
+                document.getElementById('modalEditarChofer').style.display = 'flex';
+            });
+        });
     </script>
 </body>
 </html>

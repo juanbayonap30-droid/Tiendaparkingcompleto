@@ -45,10 +45,13 @@
                             <td th:text="${carro.modelo}">Modelo</td>
                             <td th:text="${carro.placa}">ABC123</td>
                             <td th:text="${carro.motorId != null ? carro.motorId : 'Sin motor'}">-</td>
-                            <td style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <td style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                                 <a th:href="@{/carros/{placa}(placa=${carro.placa})}" style="color:#38bdf8;text-decoration:none;font-weight:600;">Ver</a>
-                                <button class="btn btn-sm btn-edit"
-                                        th:onclick="'abrirEditarCarro(\'' + ${carro.placa} + '\',\'' + ${carro.marca} + '\',\'' + ${carro.modelo} + '\',' + (${carro.motorId} != null ? ${carro.motorId} : 'null') + ')'">
+                                <button class="btn btn-sm btn-edit btn-abrir-editar-carro"
+                                        th:data-placa="${carro.placa}"
+                                        th:data-marca="${carro.marca}"
+                                        th:data-modelo="${carro.modelo}"
+                                        th:data-motorid="${carro.motorId}">
                                     Editar
                                 </button>
                                 <form th:action="@{/carros/{placa}/eliminar(placa=${carro.placa})}" method="post"
@@ -98,7 +101,7 @@
 
     <!-- Modal Editar Carro -->
     <div id="modalEditarCarro" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;">
-        <div class="card" style="width:400px;max-width:90%;position:relative;">
+        <div class="card" style="width:400px;max-width:90%;">
             <h2 class="card-title">Editar Carro</h2>
             <form id="formEditarCarro" method="post">
                 <div class="form-group">
@@ -123,7 +126,7 @@
                 </div>
                 <div style="display:flex;gap:0.5rem;margin-top:1rem;">
                     <button type="submit" class="btn">Guardar</button>
-                    <button type="button" class="btn btn-danger" onclick="cerrarModalCarro()">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="document.getElementById('modalEditarCarro').style.display='none'">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -134,18 +137,20 @@
     </footer>
 
     <script>
-        function abrirEditarCarro(placa, marca, modelo, motorId) {
-            document.getElementById('edit-marca').value = marca;
-            document.getElementById('edit-modelo').value = modelo;
-            var sel = document.getElementById('edit-motorId');
-            sel.value = (motorId && motorId !== 'null') ? motorId : '';
-            document.getElementById('formEditarCarro').action = '/carros/' + placa + '/editar';
-            var modal = document.getElementById('modalEditarCarro');
-            modal.style.display = 'flex';
-        }
-        function cerrarModalCarro() {
-            document.getElementById('modalEditarCarro').style.display = 'none';
-        }
+        document.querySelectorAll('.btn-abrir-editar-carro').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var placa = this.getAttribute('data-placa');
+                var marca = this.getAttribute('data-marca');
+                var modelo = this.getAttribute('data-modelo');
+                var motorId = this.getAttribute('data-motorid');
+                document.getElementById('edit-marca').value = marca;
+                document.getElementById('edit-modelo').value = modelo;
+                var sel = document.getElementById('edit-motorId');
+                sel.value = (motorId && motorId !== 'null') ? motorId : '';
+                document.getElementById('formEditarCarro').action = '/carros/' + placa + '/editar';
+                document.getElementById('modalEditarCarro').style.display = 'flex';
+            });
+        });
     </script>
 </body>
 </html>
