@@ -28,48 +28,56 @@ public class DatabaseConfig {
 
     @PostConstruct
     public void inicializarTablasMySQL() {
+        JdbcTemplate jdbc = new JdbcTemplate(dataSource());
         try {
-            JdbcTemplate jdbcTemplate = jdbcTemplate(dataSource());
-
-            jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS choferes (" +
+            jdbc.execute("CREATE TABLE IF NOT EXISTS choferes (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nombre VARCHAR(100) NOT NULL, " +
                     "apellido VARCHAR(100) NOT NULL, " +
                     "cedula VARCHAR(20) NOT NULL)");
+            System.out.println("[DB] Tabla choferes OK");
 
-            jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS motores (" +
+            jdbc.execute("CREATE TABLE IF NOT EXISTS motores (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "tipo VARCHAR(50) NOT NULL, " +
                     "combustible VARCHAR(50) NOT NULL, " +
                     "potencia VARCHAR(50) NOT NULL)");
+            System.out.println("[DB] Tabla motores OK");
 
-            jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS carros (" +
+            jdbc.execute("CREATE TABLE IF NOT EXISTS carros (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "marca VARCHAR(100) NOT NULL, " +
                     "modelo VARCHAR(100) NOT NULL, " +
                     "placa VARCHAR(20) NOT NULL, " +
                     "motor_id INT NULL)");
+            System.out.println("[DB] Tabla carros OK");
 
-            // Agregar motor_id si la tabla carros ya existía sin esa columna
+            // Agregar motor_id si la tabla ya existía sin esa columna
             try {
-                jdbcTemplate.execute("ALTER TABLE carros ADD COLUMN motor_id INT NULL");
-            } catch (Exception ignored) {}
+                jdbc.execute("ALTER TABLE carros ADD COLUMN motor_id INT NULL");
+                System.out.println("[DB] Columna motor_id agregada a carros");
+            } catch (Exception ignored) {
+                System.out.println("[DB] Columna motor_id ya existe en carros");
+            }
 
-            jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS usuarios (" +
+            jdbc.execute("CREATE TABLE IF NOT EXISTS usuarios (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nombre VARCHAR(100) NOT NULL, " +
                     "email VARCHAR(100) NOT NULL, " +
                     "rol VARCHAR(50) NOT NULL)");
+            System.out.println("[DB] Tabla usuarios OK");
 
-            jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS pasajeros (" +
+            jdbc.execute("CREATE TABLE IF NOT EXISTS pasajeros (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nombre VARCHAR(100) NOT NULL, " +
                     "apellido VARCHAR(100) NOT NULL, " +
                     "cedula VARCHAR(20) NOT NULL)");
+            System.out.println("[DB] Tabla pasajeros OK");
 
-            System.out.println("Tablas de MySQL verificadas/creadas exitosamente.");
+            System.out.println("[DB] Todas las tablas verificadas/creadas exitosamente.");
         } catch (Exception e) {
-            System.err.println("Aviso al verificar tablas MySQL: " + e.getMessage());
+            System.err.println("[DB] ERROR al inicializar tablas: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

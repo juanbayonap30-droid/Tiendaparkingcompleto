@@ -1,13 +1,14 @@
 package com.tiendaparking.dao.impl;
 
-import com.tiendaparking.dao.ChoferDAO;
-import com.tiendaparking.model.Chofer;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
-import java.util.List;
+import com.tiendaparking.dao.ChoferDAO;
+import com.tiendaparking.model.Chofer;
 
 @Repository
 public class ChoferDAOImpl implements ChoferDAO {
@@ -51,9 +52,11 @@ public class ChoferDAOImpl implements ChoferDAO {
     public void guardar(Chofer chofer) {
         try {
             String sql = "INSERT INTO choferes (nombre, apellido, cedula) VALUES (?, ?, ?)";
-            jdbcTemplate.update(sql, chofer.getNombre(), chofer.getApellido(), chofer.getCedula());
+            int rows = jdbcTemplate.update(sql, chofer.getNombre(), chofer.getApellido(), chofer.getCedula());
+            System.out.println("[ChoferDAO] Filas insertadas: " + rows + " | " + chofer);
         } catch (Exception e) {
-            System.err.println("Error al guardar chofer: " + e.getMessage());
+            System.err.println("[ChoferDAO] ERROR al guardar: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -61,9 +64,11 @@ public class ChoferDAOImpl implements ChoferDAO {
     public void actualizar(Chofer chofer) {
         try {
             String sql = "UPDATE choferes SET nombre = ?, apellido = ? WHERE cedula = ?";
-            jdbcTemplate.update(sql, chofer.getNombre(), chofer.getApellido(), chofer.getCedula());
+            int rows = jdbcTemplate.update(sql, chofer.getNombre(), chofer.getApellido(), chofer.getCedula());
+            System.out.println("[ChoferDAO] Filas actualizadas: " + rows + " | cedula=" + chofer.getCedula());
         } catch (Exception e) {
-            System.err.println("Error al actualizar chofer: " + e.getMessage());
+            System.err.println("[ChoferDAO] ERROR al actualizar: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
